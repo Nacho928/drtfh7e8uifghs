@@ -96,6 +96,90 @@ git remote add origin https://github.com/USUARIO/NOMBRE-REPO.git
 
 ---
 
+## Flujo completo de trabajo (add → commit → push)
+
+```powershell
+# 1. Ver el estado de los archivos (qué ha cambiado)
+git status
+
+# 2. Añadir archivos al staging area
+git add .                    # Añadir TODOS los archivos modificados
+git add archivo.txt          # Añadir un archivo específico
+git add carpeta/             # Añadir una carpeta específica
+
+# 3. Hacer el commit (guardar los cambios localmente)
+git commit -m "Descripción de los cambios"
+
+# 4. Subir los cambios a GitHub
+git push                     # Si ya has hecho push antes en esta rama
+git push -u origin nombre-rama   # Primera vez en esta rama (establece el upstream)
+
+# 5. (Opcional) Ver el historial de commits
+git log --oneline -5         # Ver últimos 5 commits en formato corto
+```
+
+### Ejemplo completo
+
+```powershell
+# Modificas archivos...
+git status                   # Ves qué archivos cambiaron
+git add .                    # Los añades
+git commit -m "Añadido nuevo feature"   # Commit
+git push                     # Subes a GitHub
+```
+
+---
+
+## Merge (fusionar ramas)
+
+El merge sirve para traer los cambios de una rama a otra.
+
+### Cómo hacer un merge
+
+```powershell
+# 1. Primero te cambias a la rama DESTINO (donde quieres traer los cambios)
+git checkout main
+
+# 2. Fusionas la otra rama
+git merge features
+```
+
+Esto trae todos los commits de `features` a `main`.
+
+### Ejemplo visual
+
+```
+Antes del merge:
+
+main:      A---B---C
+                    \
+features:            D---E---F
+
+Después de: git checkout main && git merge features
+
+main:      A---B---C---D---E---F
+```
+
+### Resolver conflictos
+
+Si ambas ramas modificaron las mismas líneas, Git te pedirá resolver el conflicto manualmente. Verás algo así en el archivo:
+
+```
+<<<<<<< HEAD
+código de main (tu rama actual)
+=======
+código de features (la rama que estás fusionando)
+>>>>>>> features
+```
+
+**Para resolverlo:**
+1. Edita el archivo y elige qué código quieres quedarte
+2. Elimina las líneas `<<<<<<<`, `=======` y `>>>>>>>`
+3. Guarda el archivo
+4. Haz `git add .` y `git commit -m "Resuelto conflicto"`
+
+---
+
 ## Comandos útiles
 
 | Comando | Descripción |
@@ -106,3 +190,56 @@ git remote add origin https://github.com/USUARIO/NOMBRE-REPO.git
 | `git merge nombre-rama` | Fusionar otra rama con la actual |
 | `git fetch origin` | Traer info de ramas remotas |
 | `git remote -v` | Ver remotos configurados |
+
+---
+
+## git switch (alternativa moderna a checkout)
+
+`git switch` es la versión moderna de `git checkout` para cambiar de ramas. Es más intuitivo.
+
+### Comparación checkout vs switch
+
+| Acción | checkout (antiguo) | switch (moderno) |
+|--------|-------------------|------------------|
+| Cambiar a una rama | `git checkout main` | `git switch main` |
+| Crear rama y cambiarte | `git checkout -b nueva-rama` | `git switch -c nueva-rama` |
+| Traer rama remota | `git checkout nombre-rama` | `git switch nombre-rama` |
+
+### Ejemplos
+
+```powershell
+# Cambiar a main
+git switch main
+
+# Crear una rama nueva y cambiarte a ella
+git switch -c mi-nueva-rama
+
+# Volver a la rama anterior
+git switch -
+```
+
+---
+
+## Pull Requests (cuando no puedes hacer push directo)
+
+Si el repo tiene reglas de protección de rama, no podrás hacer push directo. Tendrás que crear un **Pull Request**.
+
+### Error típico
+
+```
+remote: error: GH013: Repository rule violations found
+remote: - Changes must be made through a pull request.
+```
+
+### Solución: crear tu propia rama
+
+```powershell
+# Crear tu propia rama desde donde estés
+git switch -c mi-cambio
+
+# Subir TU rama (esta sí te dejará)
+git push -u origin mi-cambio
+```
+
+Luego ve a GitHub y crea un **Pull Request** de `mi-cambio` → `rama-protegida`.
+

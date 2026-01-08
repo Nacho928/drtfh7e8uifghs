@@ -243,3 +243,44 @@ git push -u origin mi-cambio
 
 Luego ve a GitHub y crea un **Pull Request** de `mi-cambio` → `rama-protegida`.
 
+---
+
+## Eliminar archivos de un commit
+
+### ANTES del push
+
+```powershell
+# Opción 1: Deshacer el commit y rehacerlo sin el archivo
+git reset HEAD~1 --soft         # Deshace el commit, mantiene cambios en staging
+git reset HEAD archivo.exe      # Quita ese archivo del staging
+git commit -m "mensaje"         # Vuelve a hacer commit sin ese archivo
+
+# Opción 2: Modificar el último commit directamente
+git rm --cached archivo.exe     # Quita el archivo del tracking
+git commit --amend              # Modifica el último commit
+```
+
+### DESPUÉS del push
+
+```powershell
+# Si nadie más ha cogido esos cambios
+git rm --cached archivo.exe
+git commit -m "Eliminado archivo.exe"
+git push
+
+# Si quieres reescribir la historia (⚠️ PELIGROSO si otros colaboran)
+git reset HEAD~1 --soft
+git reset HEAD archivo.exe
+git commit -m "mensaje"
+git push --force                # ⚠️ Sobrescribe el historial remoto
+```
+
+### Resumen de comandos
+
+| Comando | Descripción |
+|---------|-------------|
+| `git reset HEAD~1 --soft` | Deshace el último commit, mantiene cambios |
+| `git reset HEAD archivo` | Quita archivo del staging |
+| `git rm --cached archivo` | Quita archivo del tracking de git |
+| `git commit --amend` | Modifica el último commit |
+| `git push --force` | Fuerza push (⚠️ peligroso) |

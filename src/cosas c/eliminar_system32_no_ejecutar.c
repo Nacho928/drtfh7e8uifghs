@@ -1,4 +1,4 @@
-//como creo una funcion para eliminar la carpeta system32 con un .exe?
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>

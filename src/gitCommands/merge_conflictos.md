@@ -6,7 +6,7 @@ El merge sirve para traer los cambios de una rama a otra.
 
 ```powershell
 # 1. Primero te cambias a la rama DESTINO (donde quieres traer los cambios)
-git checkout main
+git switch main
 
 # 2. Fusionas la otra rama
 git merge features
@@ -23,7 +23,7 @@ main:      A---B---C
                     \
 features:            D---E---F
 
-Después de: git checkout main && git merge features
+Después de: git switch main && git merge features
 
 main:      A---B---C---D---E---F
 ```

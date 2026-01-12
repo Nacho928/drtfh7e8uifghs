@@ -6,7 +6,7 @@
 |---------|-------------|
 | `git branch` | Ver ramas locales |
 | `git branch -a` | Ver todas las ramas (locales + remotas) |
-| `git checkout main` | Volver a la rama principal |
+| `git switch main` | Volver a la rama principal |
 | `git merge nombre-rama` | Fusionar otra rama con la actual |
 | `git fetch origin` | Traer info de ramas remotas |
 | `git remote -v` | Ver remotos configurados |
